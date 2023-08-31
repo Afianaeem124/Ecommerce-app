@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'package:ecommerce/screens/showreview.dart';
+import 'package:ecommerce/screens/top.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class sales extends StatefulWidget {
   const sales({Key? key}) : super(key: key);
@@ -97,9 +100,15 @@ class _salesState extends State<sales> {
                           style: Theme.of(context).textTheme.headline3,
                         ),
                         Spacer(),
-                        Text(
-                          "View all",
-                          style: Theme.of(context).textTheme.bodyText2,
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(this.context,
+                                MaterialPageRoute(builder: (context) => Top()));
+                          },
+                          child: Text(
+                            "View all",
+                            style: Theme.of(context).textTheme.bodyText2,
+                          ),
                         ),
                       ],
                     ),
@@ -124,12 +133,52 @@ class _salesState extends State<sales> {
                                     height: 184,
                                     fit: BoxFit.cover,
                                   ),
-                                  Text(
-                                    "Rating: ${product['rating']}",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.grey,
-                                    ),
+                                  Row(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          // Navigate to the ShowReview screen here
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    showreview()), // Replace ShowReview with your target screen
+                                          );
+                                        },
+                                        child: RatingBar.builder(
+                                          ignoreGestures: true,
+                                          initialRating: double.tryParse(
+                                                  product['rating']
+                                                          ?.toString() ??
+                                                      '0') ??
+                                              0.0,
+                                          minRating: 1,
+                                          direction: Axis.horizontal,
+                                          allowHalfRating: true,
+                                          itemCount: 5,
+                                          itemSize: 20,
+                                          itemBuilder: (context, _) => Icon(
+                                            Icons.star,
+                                            color: Colors.amber,
+                                          ),
+                                          onRatingUpdate: (rating) {
+                                            // Handle rating update if needed
+                                            setState(() {});
+                                          },
+                                          unratedColor: Colors
+                                              .grey, // Color for empty stars
+                                          updateOnDrag: true,
+                                        ),
+                                      ),
+                                      Text(
+                                        product['rating']?.toString() ??
+                                            'Rating not available',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText2,
+                                        textAlign: TextAlign.start,
+                                      ),
+                                    ],
                                   ),
                                   Text(
                                     product['name'],
@@ -142,7 +191,7 @@ class _salesState extends State<sales> {
                                         Theme.of(context).textTheme.bodyText1,
                                   ),
                                   Text(
-                                    product['price'],
+                                    '\$${product['price']}',
                                     style:
                                         Theme.of(context).textTheme.bodyText1,
                                   ),
@@ -162,9 +211,15 @@ class _salesState extends State<sales> {
                           style: Theme.of(context).textTheme.headline3,
                         ),
                         Spacer(),
-                        Text(
-                          "View all",
-                          style: Theme.of(context).textTheme.bodyText2,
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(this.context,
+                                MaterialPageRoute(builder: (context) => Top()));
+                          },
+                          child: Text(
+                            "View all",
+                            style: Theme.of(context).textTheme.bodyText2,
+                          ),
                         ),
                       ],
                     ),

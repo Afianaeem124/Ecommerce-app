@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:ecommerce/screens/sale.dart';
+import 'package:ecommerce/screens/top.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -109,10 +110,19 @@ class _HomeState extends State<Home> {
                         "New",
                         style: Theme.of(context).textTheme.headline3,
                       ),
+                      SizedBox(
+                        height: 5,
+                      ),
                       Spacer(),
-                      Text(
-                        "View all",
-                        style: Theme.of(context).textTheme.bodyText2,
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(this.context,
+                              MaterialPageRoute(builder: (context) => Top()));
+                        },
+                        child: Text(
+                          "View all",
+                          style: Theme.of(context).textTheme.bodyText2,
+                        ),
                       ),
                     ],
                   ),

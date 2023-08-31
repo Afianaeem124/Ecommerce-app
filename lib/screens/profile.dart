@@ -1,9 +1,9 @@
+import 'package:ecommerce/screens/addshipping.dart';
+import 'package:ecommerce/screens/globals.dart';
+import 'package:ecommerce/screens/mybag.dart';
 import 'package:ecommerce/screens/order.dart';
 import 'package:ecommerce/screens/settings.dart';
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
-
+import 'package:ecommerce/screens/showreview.dart';
 import 'package:flutter/material.dart';
 
 /// Flutter code sample for [BottomNavigationBar].
@@ -43,6 +43,20 @@ class _MyprofileState extends State<Myprofile> {
         context, MaterialPageRoute(builder: (context) => settings()));
   }
 
+  void switchtoreview() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => showreview()));
+  }
+
+  void switchtoshipping() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => ShippingAddressInputPage()));
+  }
+
+  void switchtobag() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => MyBag()));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,7 +90,7 @@ class _MyprofileState extends State<Myprofile> {
                   Column(
                     children: [
                       Text(
-                        "Matilda Brown",
+                        name,
                         style: TextStyle(
                           fontFamily: 'Metropolis',
                           fontSize: 16,
@@ -88,7 +102,7 @@ class _MyprofileState extends State<Myprofile> {
                       Padding(
                         padding: const EdgeInsets.only(left: 25),
                         child: Text(
-                          'matildabrown@mail.com',
+                          email,
                           style: TextStyle(
                             fontFamily: 'Metropolis',
                             fontSize: 11,
@@ -101,75 +115,24 @@ class _MyprofileState extends State<Myprofile> {
                 ],
               ),
               const SizedBox(height: 25),
-              ListTile(
-                title: Text(
-                  'My Orders',
-                  style: TextStyle(
-                    fontFamily: 'Metropolis',
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xffF6F6F6),
-                  ),
-                ),
-                subtitle: Text(
-                  'Already have 12 orders',
-                  style: TextStyle(
-                    fontFamily: 'Metropolis',
-                    fontSize: 11,
-                    color: Color(0xffABB4BD),
-                  ),
-                ),
-                trailing: IconButton(
-                  icon: Icon(Icons.chevron_right, color: Color(0xffABB4BD)),
-                  onPressed: () {
-                    setState(() {
-                      switchtoorder();
-                    });
-                  },
-                ),
-              ),
+              listitem('My Orders', 'Already have 12 orders', switchtoorder),
               const SizedBox(height: 10),
-              listitem('Shipping addresses', '3 ddresses'),
+              listitem('Shipping addresses', '3 ddresses', switchtoshipping),
               const SizedBox(height: 10),
-              listitem('Payment methods', 'Visa  **34'),
+              listitem('Payment methods', 'Visa  **34', switchtoshipping),
               const SizedBox(height: 10),
-              listitem('Promocodes', 'You have special promocodes'),
+              listitem(
+                  'Promocodes', 'You have special promocodes', switchtobag),
               const SizedBox(height: 10),
-              listitem('My reviews', 'Reviews for 4 items'),
+              listitem('My reviews', 'Reviews for 4 items', switchtoreview),
               const SizedBox(height: 10),
-              ListTile(
-                title: Text(
-                  'Settings',
-                  style: TextStyle(
-                    fontFamily: 'Metropolis',
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xffF6F6F6),
-                  ),
-                ),
-                subtitle: Text(
-                  'Notifications, password',
-                  style: TextStyle(
-                    fontFamily: 'Metropolis',
-                    fontSize: 11,
-                    color: Color(0xffABB4BD),
-                  ),
-                ),
-                trailing: IconButton(
-                  icon: Icon(Icons.chevron_right, color: Color(0xffABB4BD)),
-                  onPressed: () {
-                    setState(() {
-                      switchtosettings();
-                    });
-                  },
-                ),
-              ),
+              listitem('Settings', 'Notifications, password', switchtosettings),
             ],
           ),
         ));
   }
 
-  listitem(String title, String subtitle) {
+  listitem(String title, String subtitle, Function() ontap) {
     return ListTile(
       title: Text(
         title,
@@ -190,7 +153,9 @@ class _MyprofileState extends State<Myprofile> {
       ),
       trailing: IconButton(
         icon: Icon(Icons.chevron_right, color: Color(0xffABB4BD)),
-        onPressed: () {},
+        onPressed: () {
+          ontap();
+        },
       ),
     );
   }

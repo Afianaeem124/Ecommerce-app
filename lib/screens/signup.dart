@@ -1,24 +1,27 @@
-import 'package:ecommerce/screens/search.dart';
+import 'package:ecommerce/screens/elogin.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
-import 'eforget.dart';
 import 'globals.dart';
 
-class elogin extends StatelessWidget {
-  elogin({Key? key}) : super(key: key);
+class esignup extends StatelessWidget {
+  esignup({Key? key}) : super(key: key);
+  var res;
 
+  TextEditingController namecontroller = TextEditingController();
   TextEditingController emailcontroller = TextEditingController();
   TextEditingController passwordcontroller = TextEditingController();
 
-  Future<void> putlog() async {
-    http.Response response = await http.put(
-        Uri.parse("https://ecommerce.salmanbediya.com/users/login"),
+  Future<void> postreg() async {
+    http.Response response = await http.post(
+        Uri.parse("https://ecommerce.salmanbediya.com/users/register"),
         body: {
+          "name": namecontroller.text,
           "email": emailcontroller.text,
           "password": passwordcontroller.text,
         });
+    res = response.statusCode;
 
     print(response.statusCode);
 
@@ -27,14 +30,9 @@ class elogin extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void switchtoeforget() {
+    void switchtoelogin() {
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => eforget()));
-    }
-
-    void switchtosearch() {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => search()));
+          context, MaterialPageRoute(builder: (context) => elogin()));
     }
 
     return Scaffold(
@@ -48,16 +46,38 @@ class elogin extends StatelessWidget {
               children: [
                 const SizedBox(height: 80),
                 Text(
-                  "Login",
-                  style: TextStyle(
-                    fontFamily: 'Metropolis',
-                    fontSize: 34,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xffF6F6F6),
-                  ),
+                  "Sign up",
+                  style: Theme.of(context).textTheme.headline4,
                   textAlign: TextAlign.left,
                 ),
                 const SizedBox(height: 50),
+                TextField(
+                  style: GoogleFonts.metrophobic(
+                      fontSize: 14, color: Color(0xffF5F5F5)),
+                  controller: namecontroller,
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.black, // Border color when focused
+                      ),
+                    ),
+                    hintText: "Name",
+                    hintStyle: TextStyle(
+                      fontFamily: 'Metropolis',
+                      fontSize: 11,
+                      color: Color(0xffABB4BD),
+                    ),
+                    floatingLabelStyle: GoogleFonts.cambo(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        color: Color(0xff979797)),
+                    fillColor: Color(0xff1D1D1D),
+                    filled: true,
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xff979797))),
+                  ),
+                ),
+                const SizedBox(height: 10),
                 TextField(
                   style: GoogleFonts.metrophobic(
                       fontSize: 14, color: Color(0xffF5F5F5)),
@@ -81,7 +101,13 @@ class elogin extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10),
-                TextField(
+                TextFormField(
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter your password';
+                    }
+                    return null;
+                  },
                   style: TextStyle(
                       fontFamily: 'Metropolis',
                       fontSize: 14,
@@ -110,7 +136,7 @@ class elogin extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      "Forgot your password?",
+                      "Already have an account?",
                       style: TextStyle(
                           fontFamily: 'Metropolis',
                           fontSize: 14,
@@ -122,7 +148,7 @@ class elogin extends StatelessWidget {
                       icon: Image.asset(
                           'assets/arrow.png'), // Use Image.asset instead of Icon
                       onPressed: () {
-                        switchtoeforget();
+                        switchtoelogin();
                       },
                     )
                   ],
@@ -131,12 +157,14 @@ class elogin extends StatelessWidget {
                 InkWell(
                   onTap: () async {
                     // switchtotodopage();
-
-                    email = emailcontroller.text;
+                    name = namecontroller.text;
                     if (emailcontroller.text.isNotEmpty &&
+                        namecontroller.text.isNotEmpty &&
                         passwordcontroller.text.isNotEmpty) {
-                      await putlog();
-                      switchtosearch();
+                      await postreg();
+                      if (res == 201) {
+                        switchtoelogin();
+                      }
                     } else {
                       // Show an error message or dialog to inform the user.
                       showDialog(
@@ -144,8 +172,8 @@ class elogin extends StatelessWidget {
                         builder: (BuildContext context) {
                           return AlertDialog(
                             title: Text('Incomplete Information'),
-                            content:
-                                Text('Please provide valid email and password'),
+                            content: Text(
+                                'Please provide valid name,email and password'),
                             actions: [
                               TextButton(
                                 onPressed: () {
@@ -167,7 +195,7 @@ class elogin extends StatelessWidget {
                         borderRadius: BorderRadius.circular(25)),
                     alignment: Alignment.center,
                     child: Text(
-                      "LOGIN",
+                      "SIGN UP",
                       style: TextStyle(
                           fontFamily: 'Metropolis',
                           fontSize: 14,

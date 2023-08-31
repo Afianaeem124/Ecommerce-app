@@ -12,11 +12,20 @@ dependencies:
   google_fonts: ^4.0.4
   http:
   image_picker: ^1.0.2
+  flutter_rating_bar: ^4.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^1.0.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/pngwing.png"
+   
+
 
 flutter:
   uses-material-design: true

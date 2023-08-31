@@ -11,6 +11,9 @@ class order extends StatefulWidget {
 
 class _orderState extends State<order> {
   bool isp = false;
+  bool ism = false;
+  bool isn = false;
+
   void switchtodetails() {
     Navigator.push(
         this.context, MaterialPageRoute(builder: (context) => details()));
@@ -68,16 +71,21 @@ class _orderState extends State<order> {
                   ),
                   Spacer(),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      setState(() {
+                        ism = !ism;
+                      });
+                    },
                     child: Text(
                       'Processing',
                       style: TextStyle(
                         fontFamily: 'Metropolis',
                         fontSize: 14,
-                        color: Color(0xffF6F6F6),
+                        color: ism ? Colors.black : Color(0xffF6F6F6),
                       ),
                     ),
                     style: TextButton.styleFrom(
+                      backgroundColor: ism ? Colors.white : Colors.black,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
@@ -85,16 +93,21 @@ class _orderState extends State<order> {
                   ),
                   Spacer(),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      setState(() {
+                        isn = !isn;
+                      });
+                    },
                     child: Text(
                       'Cancelled',
                       style: TextStyle(
                         fontFamily: 'Metropolis',
                         fontSize: 14,
-                        color: Color(0xffF6F6F6),
+                        color: isn ? Colors.black : Color(0xffF6F6F6),
                       ),
                     ),
                     style: TextButton.styleFrom(
+                      backgroundColor: isn ? Colors.white : Colors.black,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),

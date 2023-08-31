@@ -1,4 +1,6 @@
+import 'package:ecommerce/screens/favourite.dart';
 import 'package:ecommerce/screens/home.dart';
+import 'package:ecommerce/screens/mybag.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce/screens/profile.dart';
 
@@ -18,8 +20,8 @@ class _BottomnavigationState extends State<Bottomnavigation> {
   static List<Widget> wlist = [
     Home(),
     category(),
-    Home(),
-    Home(),
+    MyBag(),
+    Favourite(),
     Myprofile(),
   ];
 

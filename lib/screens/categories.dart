@@ -1,4 +1,7 @@
+import 'package:ecommerce/screens/top.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class category extends StatefulWidget {
   const category({Key? key}) : super(key: key);
@@ -8,13 +11,43 @@ class category extends StatefulWidget {
 }
 
 class _categoryState extends State<category> {
+  List<Map<String, dynamic>> productsList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchProduct();
+  }
+
+  Future<void> fetchProduct() async {
+    final response = await http.get(Uri.parse(
+        "https://ecommerce.salmanbediya.com/products/category/getAll"));
+    print(response.statusCode);
+
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body);
+      final categories = jsonData['categories'] as List<dynamic>;
+
+      setState(() {
+        productsList = List<Map<String, dynamic>>.from(categories);
+      });
+    } else {
+      print("API request failed with status code: ${response.statusCode}");
+    }
+  }
+
+  void switchtotop() {
+    Navigator.push(
+        this.context, MaterialPageRoute(builder: (context) => Top()));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 27),
-        child: ListView(
+        padding: const EdgeInsets.symmetric(vertical: 50),
+        child: Column(
           children: [
             SizedBox(
               height: 20,
@@ -30,7 +63,9 @@ class _categoryState extends State<category> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: InkWell(
-                onTap: () {},
+                onTap: () {
+                  switchtotop();
+                },
                 child: Container(
                   width: 340,
                   height: 48,
@@ -54,54 +89,43 @@ class _categoryState extends State<category> {
             SizedBox(
               height: 10,
             ),
-            Text(
-              "Choose category",
-              style: Theme.of(context).textTheme.bodyText2,
-              textAlign: TextAlign.start,
-            ),
-            ListTile(
-              tileColor: Colors.black,
-              leading: Text(
-                'Tops',
+            Padding(
+              padding: const EdgeInsets.only(top: 20, right: 240),
+              child: Text(
+                "Choose category",
                 style: Theme.of(context).textTheme.bodyText2,
+                textAlign: TextAlign.start,
               ),
-              onTap: () {},
             ),
-            Divider(color: Color(0xffABB4BD), endIndent: 0, indent: 0),
-            listv('Shirts & Blouses'),
-            Divider(color: Color(0xffABB4BD), endIndent: 0, indent: 0),
-            listv('Cardigans & Sweaters'),
-            Divider(color: Color(0xffABB4BD), endIndent: 0, indent: 0),
-            listv('Knitwear'),
-            Divider(color: Color(0xffABB4BD), endIndent: 0, indent: 0),
-            listv(''),
-            Divider(color: Color(0xffABB4BD), endIndent: 0, indent: 0),
-            listv('Outerwear'),
-            Divider(color: Color(0xffABB4BD), endIndent: 0, indent: 0),
-            listv('Pants'),
-            Divider(color: Color(0xffABB4BD), endIndent: 0, indent: 0),
-            listv('Jeans'),
-            Divider(color: Color(0xffABB4BD), endIndent: 0, indent: 0),
-            listv('Shorts'),
-            Divider(color: Color(0xffABB4BD), endIndent: 0, indent: 0),
-            listv('Skirts'),
-            Divider(color: Color(0xffABB4BD), endIndent: 0, indent: 0),
-            listv('Dresses'),
+            Expanded(
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: productsList.length,
+                  itemBuilder: (context, index) {
+                    final category = productsList[index];
+                    print("Category name: ${category['name']}");
+
+                    return Column(
+                      children: [
+                        ListTile(
+                          tileColor: Colors.black,
+                          leading: Text(
+                            category['name'],
+                            style: Theme.of(context).textTheme.bodyText2,
+                          ),
+                          onTap: () {
+                            switchtotop();
+                          },
+                        ),
+                        Divider(
+                            color: Color(0xffABB4BD), endIndent: 0, indent: 0),
+                      ],
+                    );
+                  }),
+            ),
           ],
         ),
       ),
-    );
-  }
-
-  listv(String txt) {
-    return ListTile(
-      tileColor: Colors.black,
-      leading: Text(
-        txt,
-        style: Theme.of(context).textTheme.bodyText2,
-      ),
-
-      //onTap: () {},
     );
   }
 }
